@@ -7,4 +7,7 @@ RUN apt -y update &&\
 
 RUN pip3 install --upgrade pip && \
     python3 -m pip install tweepy py2neo pymongo influxdb xmltodict 
+
+RUN pip3 install --upgrade pip && \
+    python3 -m pip install joblib
 USER $NB_UID

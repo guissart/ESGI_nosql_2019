@@ -35,6 +35,8 @@ services :
   mongodb :
     container_name: ESGI_MONGO
     image : mongo:latest
+    volumes:
+        - ./data:/data/import
     ports :
        - "27017:27017"
   neo4j:

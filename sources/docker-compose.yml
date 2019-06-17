@@ -5,45 +5,16 @@ services :
     container_name: ESGI_IHM
     build: docker/ihm
     ports : 
-       - "80:80"
+     - "80:80"
     volumes : 
      - ./ihm:/var/www/html/
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.9
-  mysql:
-    container_name: ESGI_MYSQLDB
-    image: mysql:latest
-    ports:
-       - "3306:3306"  
-    environment:
-       - MYSQL_ROOT_PASSWORD=admin
-       - MYSQL_DATABASE=exercice
-       - MYSQL_USER=eleve
-       - MYSQL_PASSWORD=eleve
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: ESGI_PMA
-    environment:
-       - PMA_ARBITRARY=1
-       - PMA_HOST=mysql
-       - MYSQL_USERNAME=root
-       - MYSQL_PASSWORD=admin
-    ports:
-       - "8080:80"
-    volumes:
-       - /sessions
-    links:
-       - mysql:mysql
   mongodb :
     container_name: ESGI_MONGO
     image : mongo:latest
+    volumes:
+        - ./data:/data/import
     ports :
        - "27017:27017"
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.7
-
   neo4j:
     container_name: ESGI_NEO4J
     image: neo4j:latest
@@ -54,21 +25,6 @@ services :
     ports:
        - "7474:7474"
        - "7687:7687"
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.6
-
-  influxdb:
-    container_name: ESGI_INFLUXDB
-    image: influxdb:latest
-    ports:
-      - "8086:8086"
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.8
-    volumes : 
-     - ./influxdb:/var/lib/influxdb
-
   python:
     container_name: ESGI_PYTHON
     build: docker/python
@@ -78,16 +34,3 @@ services :
     ports:
       - 8888:8888
     command: "start-notebook.sh --NotebookApp.password='sha1:f3d8da898ad8:b0ceb6c890232f1c122f68077dec74edec277f82'"
-    ## notebook password : esgi_password
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.5
-
-networks:
-  vpcbr:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 10.5.0.0/16
-#        - gateway: 10.5.0.1
